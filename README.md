@@ -11,6 +11,13 @@ Registro completo dos dados na ficha de cadastro.
 Validação automática para impedir a finalização com pendências.
 Qualificação imediata em uma lista por ordem alfabetica.
 
+🧩 Funcionalidades Principais
+Cadastro de moradores e núcleos.
+Upload e armazenamento de documentos com foto.
+Validação automática de pendências.
+Listas de qualificações imediatas.
+Geração de link de cadastro pelo coordenador.
+
 👩‍💻 Desenvolvedora
 Amanda Cristina Datzuk de Abreu
 
@@ -19,13 +26,5 @@ Linguagens de Programação:	Java
 Banco de Dados	PostgreSQL
 Ferramentas	GitHub, Visual Paradigman, VS Code, Figma
 
-
-🧩 Funcionalidades Principais
-Cadastro de moradores e núcleos.
-Upload e armazenamento de documentos com foto.
-Validação automática de pendências.
-Listas de qualificações imediatas.
-
-Geração de link de cadastro pelo coordenador.
 
 Controle de status e auditoria de cadastros.
