@@ -1,4 +1,3 @@
-
 # Dicionário de Dados – Abreu
 
 ## EMPRESA
