@@ -84,7 +84,7 @@
 |     RG_CPF_CNH       VARCHAR(20)          |
 |     Renda            NUMERIC(10,2) CHECK  |
 |     Residencia       VARCHAR(255)         |
-|     Contrato         VARCHAR(255)         |
+|     Contrato         VARCHAR(255)         | 
 |     Certidao_de_casamento_nascimento VARCHAR(255) |
 | FK  MORADOR_ID       INT → MORADOR(ID)    |
 +-------------------------------------------+
