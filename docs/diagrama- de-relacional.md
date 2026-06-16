@@ -1,8 +1,9 @@
-#Dicionário de Dados – Abreu
+# Dicionário de Dados – Abreu
 
 ## EMPRESA
 
 |          EMPRESA            |
+
 | PK  ID            | SERIAL  |
 |     Nome          |  VARCHAR(255) NOT NULL |
 |     Telefone      |  VARCHAR(20) |
@@ -15,6 +16,7 @@
 ## MUNICIPIO
 
 |         MUNICIPIO           |
+
 | PK  ID          |   SERIAL  |
 |     Nome        |  VARCHAR(255) NOT NULL |
 |     CEP         |  VARCHAR(10) |
@@ -28,6 +30,7 @@
 ## NUCLEO
 
 |           NUCLEO            |
+
 | PK  ID            |  SERIAL  |
 |     Nome          | VARCHAR(255) NOT NULL |
 |     CEP           | VARCHAR(10) |
@@ -40,6 +43,7 @@
 ## COLABORADOR
 
 |        COLABORADOR          |
+
 | PK  ID          |   SERIAL  |
 |     Nome        |  VARCHAR(255) NOT NULL |
 | UK  CPF         |  VARCHAR(14) UNIQUE |
@@ -54,6 +58,7 @@
 ## MORADOR
 
 |          MORADOR            |
+
 | PK  ID            | SERIAL  |
 |     Nome          |VARCHAR(255) NOT NULL |
 | UK  CPF           | VARCHAR(14) UNIQUE |
