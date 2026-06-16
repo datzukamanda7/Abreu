@@ -1,5 +1,5 @@
 
-# 📖 Dicionário de Dados – AbreuSys
+# 📖 Dicionário de Dados – Abreu
 
 ## EMPRESA
 +-----------------------------+
