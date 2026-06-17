@@ -82,3 +82,12 @@ Armazena os documentos entregues pelos moradores.
 | Contrato                         | VARCHAR(255)  |
 | Certidao_de_casamento_nascimento | VARCHAR(255)  |
 | MORADOR_ID                       | INT           |
+
+
+
+
+
+<img width="688" height="840" alt="DIAGRAMA REURB" src="https://github.com/user-attachments/assets/6dc1b840-c92a-4660-a264-bc64e8c87494" />
+
+
+
