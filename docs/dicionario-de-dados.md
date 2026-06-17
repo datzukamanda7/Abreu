@@ -1,4 +1,4 @@
-# Dicionário de Dados – Abreu
+# Dicionário de Dados – Abreu's
 
 ## Tabela: EMPRESA  
 Armazena os dados cadastrais das empresas vinculadas ao processo.
