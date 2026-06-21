@@ -3,97 +3,70 @@
 -- Script 05: Consultas / Relatorios
 -- =============================================================
 
-
---------------------------------------------------------------
--- 1. Relatório de cadastros com pendência documental
--- Mostra moradores que ainda não entregaram documentos obrigatórios
---------------------------------------------------------------
-
+-- 1. Relatório de cadastros com status 'Pendente de Análise'
+-- Mostra nome do morador, CPF, endereço do imóvel, núcleo urbano e data de cadastramento
+-- Ordenado pela data de cadastramento crescente
 SELECT 
-    m.ID,
     m.Nome AS Morador,
     m.CPF,
-    m.Quadra,
-    m.Lote,
+    CONCAT('Quadra ', m.Quadra, ', Lote ', m.Lote) AS Endereco_Imovel,
     n.Nome AS Nucleo,
-    mun.Nome AS Municipio,
-    mun.Estado,
-    c.Nome AS Colaborador,
-    d.Ficha_de_cadastro,
-    d.RG_CPF_CNH
+    d.Data_Cadastro
 FROM MORADOR m
-LEFT JOIN DOCUMENTO d ON m.ID = d.MORADOR_ID
-LEFT JOIN NUCLEO n ON m.NUCLEO_ID = n.ID
-LEFT JOIN MUNICIPIO mun ON n.MUNICIPIO_ID = mun.ID
-LEFT JOIN COLABORADOR c ON n.ID = c.NUCLEO_ID
-WHERE d.Ficha_de_cadastro IS NULL OR d.RG_CPF_CNH IS NULL
-ORDER BY m.ID;
+JOIN DOCUMENTO d ON m.ID = d.MORADOR_ID
+JOIN NUCLEO n ON m.NUCLEO_ID = n.ID
+WHERE d.Status = 'Pendente de Análise'
+ORDER BY d.Data_Cadastro ASC;
 
 -- ============================================================
 
-
---------------------------------------------------------------
--- 2. Relatório de processos em andamento
--- Mostra moradores cujo processo está "Na instituição" ou "Em execução de processo"
---------------------------------------------------------------
-
+-- 2. Relatório de cadastros REURB com informações do imóvel
+-- Exibe nome do morador, CPF, endereço completo, área total, tipo de construção e status
+-- Apenas processos em andamento, ordenado pelo nome do morador
 SELECT 
-    m.ID AS Morador_ID,
     m.Nome AS Morador,
     m.CPF,
-    n.Nome AS Nucleo,
-    mun.Nome AS Municipio,
-    mun.Estado,
-    d.Status,
-    c.Nome AS Colaborador
+    CONCAT('Quadra ', m.Quadra, ', Lote ', m.Lote) AS Endereco_Imovel,
+    i.Area_Total_m2,
+    i.Tipo_Construcao,
+    d.Status
 FROM MORADOR m
-LEFT JOIN DOCUMENTO d ON m.ID = d.MORADOR_ID
-LEFT JOIN NUCLEO n ON m.NUCLEO_ID = n.ID
-LEFT JOIN MUNICIPIO mun ON n.MUNICIPIO_ID = mun.ID
-LEFT JOIN COLABORADOR c ON n.ID = c.NUCLEO_ID
+JOIN DOCUMENTO d ON m.ID = d.MORADOR_ID
+JOIN NUCLEO n ON m.NUCLEO_ID = n.ID
+JOIN MUNICIPIO mun ON n.MUNICIPIO_ID = mun.ID
+JOIN IMOVEL i ON m.ID = i.MORADOR_ID
 WHERE d.Status IN ('Na instituição', 'Em execução de processo')
-ORDER BY d.Status, m.Nome;
+ORDER BY m.Nome ASC;
 
 -- ============================================================
 
---------------------------------------------------------------
--- 3. Relatório de processos finalizados
--- Mostra moradores cujo processo já foi concluído
---------------------------------------------------------------
-
+-- 3. Relatório de documentos entregues nos últimos 60 dias
+-- Exibe nome do morador, tipo de documento, data de entrega e servidor responsável
+-- Ordenado por nome do morador e data de entrega
 SELECT 
-    m.ID AS Morador_ID,
     m.Nome AS Morador,
-    m.CPF,
-    n.Nome AS Nucleo,
-    mun.Nome AS Municipio,
-    mun.Estado,
-    d.Status,
-    c.Nome AS Colaborador
+    doc.Tipo_Documento,
+    doc.Data_Entrega,
+    c.Nome AS Servidor_Responsavel
 FROM MORADOR m
+JOIN DOCUMENTO doc ON m.ID = doc.MORADOR_ID
+JOIN COLABORADOR c ON doc.Servidor_ID = c.ID
+WHERE doc.Data_Entrega >= CURRENT_DATE - INTERVAL '60 days'
+ORDER BY m.Nome ASC, doc.Data_Entrega ASC;
+
+-- ============================================================
+
+-- 4. Relatório de sumarização por núcleo urbano
+-- Total de cadastros, total de processos aprovados, pendentes e data mais recente
+-- Ordenado pelo total de cadastros decrescente
+SELECT 
+    n.Nome AS Nucleo,
+    COUNT(m.ID) AS Total_Cadastros,
+    SUM(CASE WHEN d.Status = 'Aprovado' THEN 1 ELSE 0 END) AS Total_Aprovados,
+    SUM(CASE WHEN d.Status = 'Pendente' THEN 1 ELSE 0 END) AS Total_Pendentes,
+    MAX(d.Data_Cadastro) AS Cadastro_Mais_Recente
+FROM NUCLEO n
+LEFT JOIN MORADOR m ON n.ID = m.NUCLEO_ID
 LEFT JOIN DOCUMENTO d ON m.ID = d.MORADOR_ID
-LEFT JOIN NUCLEO n ON m.NUCLEO_ID = n.ID
-LEFT JOIN MUNICIPIO mun ON n.MUNICIPIO_ID = mun.ID
-LEFT JOIN COLABORADOR c ON n.ID = c.NUCLEO_ID
-WHERE d.Status = 'Finalizado'
-ORDER BY m.Nome;
-
--- ============================================================
-
---------------------------------------------------------------
--- 4. Relatório geral: Morador + Núcleo + Município
--- Mostra todos os moradores com seus núcleos e municípios
---------------------------------------------------------------
-
-SELECT 
-    m.ID,
-    m.Nome AS Morador,
-    m.Quadra,
-    m.Lote,
-    n.Nome AS Nucleo,
-    mun.Nome AS Municipio,
-    mun.Estado
-FROM MORADOR m
-LEFT JOIN NUCLEO n ON m.NUCLEO_ID = n.ID
-LEFT JOIN MUNICIPIO mun ON n.MUNICIPIO_ID = mun.ID
-ORDER BY mun.Nome, n.Nome, m.Nome;
+GROUP BY n.Nome
+ORDER BY Total_Cadastros DESC;
